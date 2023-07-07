@@ -13,7 +13,7 @@
 
 type CustomerId = CustomerId of string
 type ProductId = ProductId of string
-type ProductInfo = {
+type ProductInfo = { 
     ProductName: string;
 }
 
@@ -58,12 +58,15 @@ type ApiClient() =
         member this.Dispose() =
             printfn "[API] Disposing"
 
-do
-use api = new ApiClient()
 
-api.Get "K1" |> printfn "[K1] %A"
-api.Set "K2" "hello" |> ignore
-api.Get<string> "K2" |> printfn "[K2] %A"
+let getPurchaseInfo (customerId : CustomerId) : Result<ProductInfo list> =
+    use api = new ApiClient();
+    api.Open();
 
-api.Set "K3" "hello" |> ignore
-api.Get<int> "K3" |> printfn "[K3] %A"
+    let productIdsResult = api.Get<ProductId list> customerId
+
+    let productInfosResults = 
+
+    api.Close()
+
+    productInfosResults
