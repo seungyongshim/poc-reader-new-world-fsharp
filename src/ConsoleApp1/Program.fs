@@ -1,3 +1,7 @@
+open FSharpPlus.Operators
+open FSharpPlus
+
+
 // https://fsharpforfunandprofit.com/posts/elevated-world-6/
 // designing your own elevated world
 
@@ -58,15 +62,10 @@ type ApiClient() =
         member this.Dispose() =
             printfn "[API] Disposing"
 
+type ApiAction<'a> = ApiAction of (ApiClient -> 'a)
 
-let getPurchaseInfo (customerId : CustomerId) : Result<ProductInfo list> =
-    use api = new ApiClient();
-    api.Open();
+let getPurchaseIds (CustomerId: CustomerId) =
+    let action (api: ApiClient) =
+        api.Get<ProductId list> CustomerId
 
-    let productIdsResult = api.Get<ProductId list> customerId
-
-    let productInfosResults = 
-
-    api.Close()
-
-    productInfosResults
+    ApiAction action
